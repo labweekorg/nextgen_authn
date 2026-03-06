@@ -13,4 +13,8 @@ STEPS:
 4. git config --global user.email <new email id - ex: "Shasmitha_Nagarajan@comcast.com">
 5. verify - git config --list
 6. go to your project folder path - cd <your folder path>
-7. Happy commit :)
+7. git credential-osxkeychain erase
+   host=github.com
+   protocol=https
+8. git push
+9. Happy coding :)
