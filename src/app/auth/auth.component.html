@@ -1,0 +1,59 @@
+<div class="grid-bg"></div>
+<div class="container">
+  <div class="card">
+
+    <div class="shield-icon">
+      <img src="../assets/svg/512px-Comcast_(2013-2024)_logo.svg.png" alt="Shield Icon" style="width:72px;height:36px;">
+    </div>
+
+    <div class="heading">Verify your identity</div>
+    <p class="subtext">Choose one or more authentication methods below to continue securely.</p>
+
+    <div class="section-label">Authentication Method</div>
+
+    <div class="auth-grid">
+   
+      <div class="auth-card" id="card-bio" (click)="selectMethod('bio')">
+        <div class="check-badge">✓</div>
+        <div class="auth-icon">👆</div>
+        <div class="auth-name">Biometric</div>
+        <div class="auth-desc">Fingerprint scan via device sensor</div>
+      </div>
+    
+      <div class="auth-card" id="card-face"  (click)="selectMethod('face')">
+        <div class="check-badge">✓</div>
+        <div class="auth-icon">🧬</div>
+        <div class="auth-name">Face ID</div>
+        <div class="auth-desc">Facial recognition using camera</div>
+      </div>
+
+      <div class="auth-card" id="card-pass" (click)="selectMethod('pass')">
+        <div class="check-badge">✓</div>
+        <div class="auth-icon">🔑</div>
+        <div class="auth-name">Passkey PIN</div>
+        <div class="auth-desc">Enter your secure 6-digit PIN</div>
+      </div>
+ 
+    </div>
+
+  
+    <div class="auth-panel" id="auth-panel">
+      <div  *ngIf="!selectedMethod; else methodSelected" class="panel-content" id="panel-content" >
+        <div style="font-size:36px;margin-bottom:12px;opacity:0.3">🔒</div>
+        <div class="panel-title" style="color:var(--muted)">Select a method above</div>
+        <div class="panel-sub">We'll guide you through the verification</div>
+      </div>
+      <ng-template #methodSelected>
+        <router-outlet></router-outlet>
+      </ng-template>
+    </div>
+
+
+    <div class="panel-sub" style="font-size: 14px;margin-top: 12px;text-align: center;animation: cardIn 0.6s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;">New User? <a href="#">Sign up</a> </div>
+
+    <div class="footer-text">
+      Having trouble? <a href="#">Contact support</a> or <a href="#">use a recovery code</a>
+    </div>
+
+  </div>
+</div>

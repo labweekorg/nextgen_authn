@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up — Secure Authentication</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f8ff;
+  --white: #ffffff;
+  --blue: #3095f2;
+  --blue-dark: #1a7ad4;
+  --blue-deep: #0d5db5;
+  --blue-light: #e8f3fe;
+  --blue-lighter: #f0f7ff;
+  --border: rgba(48,149,242,0.15);
+  --border-soft: rgba(48,149,242,0.08);
+  --text: #0a1929;
+  --text-mid: #3d5a80;
+  --muted: #8aaecf;
+  --shadow-blue: rgba(48,149,242,0.18);
+  --shadow-sm: 0 2px 12px rgba(48,149,242,0.08);
+  --shadow-md: 0 8px 32px rgba(48,149,242,0.14);
+  --shadow-lg: 0 24px 60px rgba(48,149,242,0.16);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  overflow-x: hidden;
+}
+
+/* ─── LEFT PANEL ─── */
+.left-panel {
+  width: 420px;
+  min-height: 100vh;
+  background: linear-gradient(160deg, var(--blue) 0%, var(--blue-deep) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 44px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.left-panel::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  pointer-events: none;
+}
+.left-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -80px;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+
+.left-circles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.lc {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.lc:nth-child(1) { width: 200px; height: 200px; top: 40%; left: -80px; }
+.lc:nth-child(2) { width: 120px; height: 120px; top: 60%; right: 20px; }
+.lc:nth-child(3) { width: 60px; height: 60px; top: 30%; right: 50px; }
+
+.brand { display: flex; align-items: center; gap: 12px; animation: fadeUp 0.6s both; }
+.brand-mark {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  backdrop-filter: blur(6px);
+}
+.brand-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.3px;
+}
+
+.left-content { animation: fadeUp 0.6s 0.1s both; position: relative; z-index: 1; }
+.left-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 24px;
+  backdrop-filter: blur(6px);
+}
+.left-tag-dot { width: 6px; height: 6px; background: #7fffcc; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.5)} }
+
+.left-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 34px;
+  font-weight: 800;
+  color: white;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+.left-heading span {
+  display: block;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+}
+
+.left-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+
+.feature-list { display: flex; flex-direction: column; gap: 14px; }
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.feature-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  backdrop-filter: blur(4px);
+}
+.feature-text strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 2px;
+}
+.feature-text span { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 300; }
+
+.left-footer {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  animation: fadeUp 0.6s 0.2s both;
+  position: relative; z-index: 1;
+}
+
+/* ─── RIGHT PANEL ─── */
+.right-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.right-panel::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(48,149,242,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Step progress */
+.step-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 40px;
+  animation: fadeUp 0.5s both;
+}
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+  transition: background 0.4s;
+}
+.step-item.done:not(:last-child)::after { background: var(--blue); }
+
+.step-circle {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  position: relative; z-index: 1;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.step-item.active .step-circle {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(48,149,242,0.15);
+}
+.step-item.done .step-circle {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+.step-label {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.step-item.active .step-label { color: var(--blue); font-weight: 600; }
+.step-item.done .step-label { color: var(--blue-dark); }
+
+/* ─── STEP PAGES ─── */
+.step-page { display: none; animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+.step-page.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.page-sub {
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 32px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* Form fields */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field { margin-bottom: 18px; }
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-mid);
+  margin-bottom: 7px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.field-input {
+  width: 100%;
+  padding: 13px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+.field-input::placeholder { color: var(--muted); }
+.field-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(48,149,242,0.1), var(--shadow-sm);
+}
+
+.field-input-icon {
+  position: relative;
+}
+.field-input-icon .field-input { padding-left: 44px; }
+.field-input-icon .icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* Password strength */
+.pw-strength {
+  margin-top: 8px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.pw-bar {
+  height: 3px;
+  flex: 1;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.pw-bar.weak { background: #f87171; }
+.pw-bar.medium { background: #fbbf24; }
+.pw-bar.strong { background: #34d399; }
+.pw-label { font-size: 11px; color: var(--muted); margin-left: 6px; }
+
+/* Terms */
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.terms-check {
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+  appearance: none;
+  background: white;
+  transition: all 0.2s;
+  position: relative;
+}
+.terms-check:checked {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.terms-check:checked::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+}
+.terms-text { font-size: 13px; color: var(--text-mid); line-height: 1.5; }
+.terms-text a { color: var(--blue); font-weight: 500; text-decoration: none; }
+
+/* ─── AUTH METHOD CARDS ─── */
+.auth-method-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.auth-method-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 22px 24px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.auth-method-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, rgba(48,149,242,0.06), transparent);
+  transition: width 0.3s;
+}
+.auth-method-card:hover::before { width: 100%; }
+
+.auth-method-card:hover {
+  border-color: var(--blue);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+}
+
+.auth-method-card.selected {
+  border-color: var(--blue);
+  background: var(--blue-lighter);
+  box-shadow: 0 0 0 1px var(--blue), var(--shadow-md);
+}
+
+.method-icon-wrap {
+  width: 52px; height: 52px;
+  border-radius: 16px;
+  background: var(--blue-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.auth-method-card.selected .method-icon-wrap {
+  background: var(--blue);
+  box-shadow: 0 4px 14px var(--shadow-blue);
+}
+
+.method-info { flex: 1; }
+.method-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.method-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+.method-radio {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  transition: all 0.2s;
+  flex-shrink: 0;
+  position: relative;
+}
+.method-radio::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: white;
+  transform: scale(0);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.auth-method-card.selected .method-radio {
+  border-color: var(--blue);
+  background: var(--blue);
+}
+.auth-method-card.selected .method-radio::after { transform: scale(1); }
+
+/* ─── SETUP PANELS ─── */
+.setup-panel {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 28px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.setup-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--blue-deep));
+  border-radius: 20px 20px 0 0;
+}
+
+/* Biometric animation */
+.fingerprint-wrap {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  border: 3px solid rgba(48,149,242,0.2);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  position: relative;
+  animation: ringBreath 2.5s ease-in-out infinite;
+}
+@keyframes ringBreath {
+  0%,100% { box-shadow: 0 0 0 0 rgba(48,149,242,0.2); }
+  50% { box-shadow: 0 0 0 12px rgba(48,149,242,0.05); }
+}
+.fingerprint-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 1px solid rgba(48,149,242,0.1);
+}
+.fp-inner {
+  width: 66px; height: 66px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-light), var(--bg));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px;
+}
+.fp-spinner {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--blue);
+  animation: spin 1.4s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Face ID animation */
+.face-frame {
+  width: 90px; height: 90px;
+  border-radius: 22px;
+  border: 3px solid rgba(48,149,242,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 46px;
+  position: relative;
+  overflow: hidden;
+}
+.face-corners::before, .face-corners::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  border-color: var(--blue);
+  border-style: solid;
+  border-width: 0;
+}
+.face-frame .corner-tl { position:absolute;top:0;left:0;border-top-width:3px;border-left-width:3px; border-radius: 8px 0 0 0; }
+.face-frame .corner-tr { position:absolute;top:0;right:0;border-top-width:3px;border-right-width:3px; border-radius: 0 8px 0 0; }
+.face-frame .corner-bl { position:absolute;bottom:0;left:0;border-bottom-width:3px;border-left-width:3px; border-radius: 0 0 0 8px; }
+.face-frame .corner-br { position:absolute;bottom:0;right:0;border-bottom-width:3px;border-right-width:3px; border-radius: 0 0 8px 0; }
+.face-scan-bar {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  animation: faceBarScan 2s ease-in-out infinite;
+  top: 0;
+}
+@keyframes faceBarScan {
+  0% { top: 0; opacity: 1; }
+  80% { top: 100%; opacity: 0.6; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Passkey PIN */
+.pin-dots { display: flex; gap: 10px; justify-content: center; margin: 0 auto 16px; }
+.pin-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: white;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.pin-dot.filled {
+  background: var(--blue);
+  border-color: var(--blue);
+  box-shadow: 0 0 8px rgba(48,149,242,0.4);
+  transform: scale(1.15);
+}
+.numpad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 200px;
+  margin: 0 auto;
+}
+.num-key {
+  background: var(--blue-lighter);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 11px;
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.num-key:hover { background: var(--blue); color: white; border-color: var(--blue); transform: scale(1.05); }
+.num-key:active { transform: scale(0.95); }
+.num-key.empty { visibility: hidden; }
+
+/* Setup title / desc inside panel */
+.setup-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.setup-hint { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+/* Buttons */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.2px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 18px var(--shadow-blue);
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(48,149,242,0.4); }
+.btn-primary:hover::after { opacity: 1; }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-ghost {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  color: var(--blue);
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+.btn-ghost:hover { background: var(--blue-light); border-color: var(--blue); }
+
+/* Sign-in link */
+.signin-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.signin-link a { color: var(--blue); font-weight: 600; text-decoration: none; }
+
+/* ─── SUCCESS STATE ─── */
+.success-state {
+  text-align: center;
+  padding: 20px 0;
+  animation: fadeUp 0.5s both;
+}
+.success-check {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 28px rgba(48,149,242,0.4);
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.success-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+
+/* ─── DIVIDER ─── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Selected method summary */
+.selected-summary {
+  display: none;
+  background: var(--blue-lighter);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--blue-dark);
+  font-weight: 500;
+  align-items: center;
+  gap: 10px;
+}
+.selected-summary.show { display: flex; }
+
+@media (max-width: 860px) {
+  .left-panel { display: none; }
+  .right-panel { padding: 32px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="left-circles">
+    <div class="lc"></div><div class="lc"></div><div class="lc"></div>
+  </div>
+
+  <div class="brand">
+    <div class="brand-mark">🛡️</div>
+    <div class="brand-name">SecureAuth</div>
+  </div>
+
+  <div class="left-content">
+    <div class="left-tag"><span class="left-tag-dot"></span> Passwordless Security</div>
+    <div class="left-heading">
+      Your identity,<br>
+      <span>protected always.</span>
+    </div>
+    <p class="left-sub">Sign up once and access everything securely using your biometrics, face, or a personal passkey — no passwords to forget.</p>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">👆</div>
+        <div class="feature-text">
+          <strong>Biometric Login</strong>
+          <span>Fingerprint sensor on your device</span>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🧬</div>
+        <div class="feature-text">
+          <strong>Face Recognition</strong>
+          <span>AI-powered facial authentication</span>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔑</div>
+        <div class="feature-text">
+          <strong>Passkey PIN</strong>
+          <span>Secure 6-digit encrypted passkey</span>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-text">
+          <strong>End-to-end Encrypted</strong>
+          <span>Your data never leaves your device</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="left-footer">© 2025 SecureAuth · Privacy · Terms</div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="form-container">
+
+    <!-- Step Progress -->
+    <div class="step-progress" id="stepProgress">
+      <div class="step-item active" id="sp1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Account</div>
+      </div>
+      <div class="step-item" id="sp2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Choose Auth</div>
+      </div>
+      <div class="step-item" id="sp3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Setup</div>
+      </div>
+      <div class="step-item" id="sp4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Done</div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 1: Account Info ─── -->
+    <div class="step-page active" id="page1">
+      <div class="page-title">Create your account</div>
+      <p class="page-sub">Fill in your details to get started. No password needed.</p>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label">First Name</label>
+          <div class="field-input-icon">
+            <span class="icon">👤</span>
+            <input class="field-input" type="text" placeholder="Arjun" id="firstName">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Last Name</label>
+          <div class="field-input-icon">
+            <span class="icon">👤</span>
+            <input class="field-input" type="text" placeholder="Sharma" id="lastName">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Email Address</label>
+        <div class="field-input-icon">
+          <span class="icon">✉️</span>
+          <input class="field-input" type="email" placeholder="arjun@example.com" id="email">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Phone Number</label>
+        <div class="field-input-icon">
+          <span class="icon">📱</span>
+          <input class="field-input" type="tel" placeholder="+91 98765 43210" id="phone">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Backup Password <span style="color:var(--muted);font-weight:300;text-transform:none">(optional)</span></label>
+        <div class="field-input-icon">
+          <span class="icon">🔐</span>
+          <input class="field-input" type="password" placeholder="Min. 8 characters" id="password" oninput="checkPw(this.value)">
+        </div>
+        <div class="pw-strength" id="pwStrength" style="display:none">
+          <div class="pw-bar" id="bar1"></div>
+          <div class="pw-bar" id="bar2"></div>
+          <div class="pw-bar" id="bar3"></div>
+          <div class="pw-bar" id="bar4"></div>
+          <span class="pw-label" id="pwLabel">Weak</span>
+        </div>
+      </div>
+
+      <div class="terms-row">
+        <input type="checkbox" class="terms-check" id="terms">
+        <label for="terms" class="terms-text">
+          I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I understand my authentication data is stored securely on my device.
+        </label>
+      </div>
+
+      <button class="btn-primary" onclick="goStep(2)">Continue →</button>
+      <div class="signin-link">Already have an account? <a href="#">Sign in</a></div>
+    </div>
+
+    <!-- ─── STEP 2: Choose Auth Method ─── -->
+    <div class="step-page" id="page2">
+      <div class="page-title">Choose your method</div>
+      <p class="page-sub">Select how you'd like to authenticate. You can add more methods later.</p>
+
+      <div class="auth-method-grid">
+        <div class="auth-method-card" id="m-bio" onclick="selectAuthMethod('bio')">
+          <div class="method-icon-wrap">👆</div>
+          <div class="method-info">
+            <div class="method-title">Biometric (Fingerprint)</div>
+            <div class="method-desc">Uses your device's fingerprint sensor for instant, secure login</div>
+          </div>
+          <div class="method-radio"></div>
+        </div>
+        <div class="auth-method-card" id="m-face" onclick="selectAuthMethod('face')">
+          <div class="method-icon-wrap">🧬</div>
+          <div class="method-info">
+            <div class="method-title">Face Recognition</div>
+            <div class="method-desc">Authenticate using facial geometry scanned by your camera</div>
+          </div>
+          <div class="method-radio"></div>
+        </div>
+        <div class="auth-method-card" id="m-pass" onclick="selectAuthMethod('pass')">
+          <div class="method-icon-wrap">🔑</div>
+          <div class="method-info">
+            <div class="method-title">Passkey PIN</div>
+            <div class="method-desc">Set a personal 6-digit encrypted passkey for secure access</div>
+          </div>
+          <div class="method-radio"></div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="continueSetup" onclick="goStep(3)" disabled>Set Up Selected Method →</button>
+      <button class="btn-ghost" onclick="goStep(1)">← Back</button>
+    </div>
+
+    <!-- ─── STEP 3: Setup Auth ─── -->
+    <div class="step-page" id="page3">
+      <div class="page-title" id="setupTitle">Setup Biometric</div>
+      <p class="page-sub" id="setupSub">Follow the steps to register your authentication method.</p>
+
+      <div class="selected-summary show" id="selectedSummary">
+        <span>🔒</span>
+        <span id="summaryText">Setting up Fingerprint Biometric</span>
+      </div>
+
+      <!-- Biometric Panel -->
+      <div class="setup-panel" id="bioPanel" style="display:none">
+        <div class="fingerprint-wrap">
+          <div class="fp-inner">👆</div>
+          <div class="fp-spinner"></div>
+        </div>
+        <div class="setup-label">Place your finger on the sensor</div>
+        <div class="setup-hint">Press and hold the fingerprint sensor on your device.<br>We'll capture 3 samples for accuracy.</div>
+        <div style="margin-top:16px;display:flex;gap:8px;justify-content:center">
+          <div id="fp1" style="width:10px;height:10px;border-radius:50%;background:var(--border);transition:all 0.3s"></div>
+          <div id="fp2" style="width:10px;height:10px;border-radius:50%;background:var(--border);transition:all 0.3s"></div>
+          <div id="fp3" style="width:10px;height:10px;border-radius:50%;background:var(--border);transition:all 0.3s"></div>
+        </div>
+      </div>
+
+      <!-- Face ID Panel -->
+      <div class="setup-panel" id="facePanel" style="display:none">
+        <div class="face-frame">
+          <span style="position:relative;z-index:1;font-size:46px">😊</span>
+          <div class="face-scan-bar"></div>
+          <div class="corner-tl" style="position:absolute;top:0;left:0;width:18px;height:18px;border-top:3px solid var(--blue);border-left:3px solid var(--blue);border-radius:8px 0 0 0;z-index:2"></div>
+          <div class="corner-tr" style="position:absolute;top:0;right:0;width:18px;height:18px;border-top:3px solid var(--blue);border-right:3px solid var(--blue);border-radius:0 8px 0 0;z-index:2"></div>
+          <div class="corner-bl" style="position:absolute;bottom:0;left:0;width:18px;height:18px;border-bottom:3px solid var(--blue);border-left:3px solid var(--blue);border-radius:0 0 0 8px;z-index:2"></div>
+          <div class="corner-br" style="position:absolute;bottom:0;right:0;width:18px;height:18px;border-bottom:3px solid var(--blue);border-right:3px solid var(--blue);border-radius:0 0 8px 0;z-index:2"></div>
+        </div>
+        <div class="setup-label">Look straight at the camera</div>
+        <div class="setup-hint">Ensure good lighting and center your face.<br>Remove glasses if needed for better accuracy.</div>
+        <div style="margin-top:12px;background:var(--blue-light);border-radius:8px;padding:8px 16px;font-size:11px;color:var(--blue-dark)">📡 Scanning face geometry…</div>
+      </div>
+
+      <!-- Passkey PIN Panel -->
+      <div class="setup-panel" id="passPanel" style="display:none">
+        <div class="pin-dots" id="pinDots">
+          <div class="pin-dot" id="pd1"></div>
+          <div class="pin-dot" id="pd2"></div>
+          <div class="pin-dot" id="pd3"></div>
+          <div class="pin-dot" id="pd4"></div>
+          <div class="pin-dot" id="pd5"></div>
+          <div class="pin-dot" id="pd6"></div>
+        </div>
+        <div class="setup-label" style="margin-bottom:14px">Create your 6-digit passkey</div>
+        <div class="numpad-grid" id="setupNumpad"></div>
+      </div>
+
+      <button class="btn-primary" id="completeBtn" onclick="goStep(4)">Complete Setup ✓</button>
+      <button class="btn-ghost" onclick="goStep(2)">← Change Method</button>
+    </div>
+
+    <!-- ─── STEP 4: Success ─── -->
+    <div class="step-page" id="page4">
+      <div class="success-state">
+        <div class="success-check">✓</div>
+        <div class="success-title">You're all set!</div>
+        <p class="success-sub">Your account has been created and your authentication method is registered. You can now sign in securely without a password.</p>
+
+        <div style="background:var(--blue-lighter);border:1.5px solid var(--border);border-radius:16px;padding:20px;margin-bottom:28px;text-align:left">
+          <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">Account Summary</div>
+          <div style="font-size:13px;color:var(--text-mid);display:flex;flex-direction:column;gap:8px" id="summaryDetails"></div>
+        </div>
+
+        <button class="btn-primary" onclick="alert('Welcome! Redirecting to dashboard…')">Go to Dashboard →</button>
+        <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--muted)">
+          Want to add another auth method? <a href="#" style="color:var(--blue);font-weight:600">Security Settings →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+  let selectedMethod = null;
+  let pinCount = 0;
+
+  function goStep(n) {
+    if (n === 2) {
+      const email = document.getElementById('email').value;
+      if (!email && n > 1 && currentStep === 1) { /* allow anyway for demo */ }
+    }
+
+    // Hide all pages
+    document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page' + n).classList.add('active');
+
+    // Update progress
+    for (let i = 1; i <= 4; i++) {
+      const sp = document.getElementById('sp' + i);
+      sp.classList.remove('active', 'done');
+      if (i < n) sp.classList.add('done');
+      if (i === n) sp.classList.add('active');
+    }
+
+    // Update done circles to show checkmark
+    document.querySelectorAll('.step-item.done .step-circle').forEach(c => {
+      if (!c.dataset.original) c.dataset.original = c.textContent;
+      c.textContent = '✓';
+    });
+    document.querySelectorAll('.step-item:not(.done) .step-circle').forEach(c => {
+      if (c.dataset.original) c.textContent = c.dataset.original;
+    });
+
+    currentStep = n;
+
+    if (n === 3) renderSetupPanel();
+    if (n === 4) renderSummary();
+  }
+
+  function selectAuthMethod(method) {
+    selectedMethod = method;
+    ['bio','face','pass'].forEach(m => document.getElementById('m-'+m).classList.remove('selected'));
+    document.getElementById('m-'+method).classList.add('selected');
+    document.getElementById('continueSetup').disabled = false;
+  }
+
+  function renderSetupPanel() {
+    ['bioPanel','facePanel','passPanel'].forEach(p => document.getElementById(p).style.display = 'none');
+
+    const titles = { bio: 'Setup Biometric', face: 'Setup Face ID', pass: 'Create Your Passkey' };
+    const subs = {
+      bio: 'Register your fingerprint so you can log in instantly.',
+      face: 'Register your face for camera-based authentication.',
+      pass: 'Set a 6-digit passkey you\'ll remember. It will be encrypted on your device.'
+    };
+    const summaries = {
+      bio: '👆 Fingerprint Biometric — Scanning in progress…',
+      face: '🧬 Face Recognition — Camera initializing…',
+      pass: '🔑 Passkey PIN — Enter your 6-digit code below'
+    };
+
+    document.getElementById('setupTitle').textContent = titles[selectedMethod];
+    document.getElementById('setupSub').textContent = subs[selectedMethod];
+    document.getElementById('summaryText').textContent = summaries[selectedMethod];
+
+    if (selectedMethod === 'bio') {
+      document.getElementById('bioPanel').style.display = 'flex';
+      simulateFingerprintScan();
+    } else if (selectedMethod === 'face') {
+      document.getElementById('facePanel').style.display = 'flex';
+    } else if (selectedMethod === 'pass') {
+      document.getElementById('passPanel').style.display = 'flex';
+      buildNumpad();
+    }
+  }
+
+  function simulateFingerprintScan() {
+    pinCount = 0;
+    let scan = 0;
+    const dots = [document.getElementById('fp1'), document.getElementById('fp2'), document.getElementById('fp3')];
+    dots.forEach(d => { d.style.background = 'var(--border)'; });
+    const iv = setInterval(() => {
+      if (scan < 3) {
+        dots[scan].style.background = 'var(--blue)';
+        dots[scan].style.boxShadow = '0 0 6px rgba(48,149,242,0.5)';
+        scan++;
+      } else {
+        clearInterval(iv);
+      }
+    }, 900);
+  }
+
+  function buildNumpad() {
+    const numpad = document.getElementById('setupNumpad');
+    numpad.innerHTML = '';
+    pinCount = 0;
+    for (let i = 1; i <= 6; i++) document.getElementById('pd'+i).classList.remove('filled');
+
+    const keys = [1,2,3,4,5,6,7,8,9,'','0','⌫'];
+    keys.forEach(k => {
+      const btn = document.createElement('button');
+      btn.className = 'num-key' + (k === '' ? ' empty' : '');
+      btn.textContent = k;
+      if (k !== '') {
+        btn.onclick = () => {
+          if (k === '⌫') {
+            if (pinCount > 0) {
+              document.getElementById('pd'+pinCount).classList.remove('filled');
+              pinCount--;
+            }
+          } else if (pinCount < 6) {
+            pinCount++;
+            document.getElementById('pd'+pinCount).classList.add('filled');
+          }
+        };
+      }
+      numpad.appendChild(btn);
+    });
+  }
+
+  function renderSummary() {
+    const methodLabels = { bio: '👆 Biometric Fingerprint', face: '🧬 Face Recognition', pass: '🔑 Passkey PIN' };
+    const fn = document.getElementById('firstName').value || 'User';
+    const em = document.getElementById('email').value || 'user@example.com';
+    const ph = document.getElementById('phone').value || '—';
+
+    document.getElementById('summaryDetails').innerHTML = `
+      <div>👤 <strong>Name:</strong> ${fn} ${document.getElementById('lastName').value || ''}</div>
+      <div>✉️ <strong>Email:</strong> ${em}</div>
+      <div>📱 <strong>Phone:</strong> ${ph}</div>
+      <div>🔐 <strong>Auth Method:</strong> ${methodLabels[selectedMethod] || '—'}</div>
+      <div style="margin-top:4px;padding-top:8px;border-top:1px solid var(--border);color:var(--blue);font-weight:600;font-size:12px">✅ Encrypted & stored on device</div>
+    `;
+  }
+
+  // Password strength
+  function checkPw(val) {
+    const el = document.getElementById('pwStrength');
+    el.style.display = val ? 'flex' : 'none';
+    const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3'), document.getElementById('bar4')];
+    const label = document.getElementById('pwLabel');
+    bars.forEach(b => { b.className = 'pw-bar'; });
+    let score = 0;
+    if (val.length >= 6) score++;
+    if (val.length >= 10) score++;
+    if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const levels = ['', 'weak', 'medium', 'strong', 'strong'];
+    const labels = ['', 'Weak', 'Fair', 'Strong', 'Very Strong'];
+    for (let i = 0; i < score; i++) bars[i].classList.add(levels[score]);
+    label.textContent = labels[score] || '';
+  }
+</script>
+</body>
+</html>
