@@ -17,7 +17,7 @@
 
   body {
     background: var(--bg);
-    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),url(./assets/image/istockphoto-485320832-1024x1024.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),url(./assets/image/illustration.jpeg);
     background-position: center;
       background-repeat: no-repeat;
   background-attachment: fixed;
