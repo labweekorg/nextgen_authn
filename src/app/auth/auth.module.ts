@@ -7,8 +7,9 @@ import { FaceRecognitionComponent } from './face-recognition/face-recognition.co
 import { BioMetricsComponent } from './bio-metrics/bio-metrics.component';
 import { PassKeyComponent } from './pass-key/pass-key.component';
 import { InputOtpModule } from 'primeng/inputotp';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthComponent } from './auth.component';
+import { ComcastSignComponent } from './comcast-sign/comcast-sign/comcast-sign.component';
 
 
 @NgModule({
@@ -17,11 +18,13 @@ import { AuthComponent } from './auth.component';
         FaceRecognitionComponent,
         PassKeyComponent,
         OtpCodeComponent,
-        AuthComponent
+        AuthComponent,
+        ComcastSignComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     InputOtpModule,
     AuthRoutingModule
   ]

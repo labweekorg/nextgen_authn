@@ -5,6 +5,7 @@ import { PassKeyComponent } from './pass-key/pass-key.component';
 import { OtpCodeComponent } from './otp-code/otp-code.component';
 import { FaceRecognitionComponent } from './face-recognition/face-recognition.component';
 import { AuthComponent } from './auth.component';
+import { ComcastSignComponent } from './comcast-sign/comcast-sign/comcast-sign.component';
 
 const routes: Routes = [
   {
@@ -24,7 +25,11 @@ const routes: Routes = [
 {
   path: 'face',
   component: FaceRecognitionComponent
-}]}];
+}
+]},{
+  path: 'comcast-sign',
+  component: ComcastSignComponent
+}];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
