@@ -7,21 +7,22 @@ import { FaceRecognitionComponent } from './auth/face-recognition/face-recogniti
 
 const routes: Routes = [
   {
-  path:'signup',
-  loadChildren: () => import('./sign-up/sign-up.module').then(m => m.SignUpModule)
-},
-{
-  path:'',
-  loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-},
-{
-  path: '',
-  redirectTo: '/',
-  pathMatch: 'full'
-}];
+    path: 'signup',
+    loadChildren: () => import('./sign-up/sign-up.module').then((m) => m.SignUpModule),
+  },
+  {
+    path: '',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: '',
+    redirectTo: '/',
+    pathMatch: 'full',
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

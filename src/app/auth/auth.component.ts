@@ -16,7 +16,9 @@ export class AuthComponent {
 
   constructor(public router: Router,public activatedRoute: ActivatedRoute) {
      this.currentUrl = window.location.href.split('/').pop() || '';
-     this.selectMethod(this.currentUrl);
+     if (this.currentUrl && (this.currentUrl === 'bio' || this.currentUrl === 'face' || this.currentUrl === 'pass')) {
+       this.selectMethod(this.currentUrl);
+     }
      
   }
 
