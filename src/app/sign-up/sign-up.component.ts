@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WebAuthnService } from '../service/webauthn.service';
+import { AuthStateService } from '../service/authState.service';
 
 type RegistrationMethod = 'fingerprint' | 'faceId' | 'passkey';
 type RegistrationStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -45,7 +46,8 @@ export class SignUpComponent implements OnDestroy {
 
   constructor(
     public fb: FormBuilder,
-    private webAuthnService: WebAuthnService
+    private webAuthnService: WebAuthnService,
+    public authState: AuthStateService
   ) {
     this.employeeForm = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -61,6 +63,13 @@ export class SignUpComponent implements OnDestroy {
         ],
       ],
     });
+    this.getUserDetails();
+  }
+
+  getUserDetails() {
+  this.employeeForm.patchValue({
+    email: this.authState.getUser()?.email || ''
+  });
   }
 
   // Helper method to check if field is invalid and touched

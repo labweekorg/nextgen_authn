@@ -13,6 +13,8 @@ import { SignUpModule } from './sign-up/sign-up.module';
 import { StepperModule } from 'primeng/stepper';
 import { definePreset } from '@primeng/themes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { SignUpRoutingModule } from './sign-up/sign-up-routing.module';
+import { AuthStateService } from './service/authState.service';
 
 const MyPreset = definePreset(Aura, {
   semantic: {
@@ -73,7 +75,8 @@ const MyPreset = definePreset(Aura, {
     FormsModule,
     StepperModule,
     InputOtpModule,
-    SignUpModule
+    SignUpModule,
+    SignUpRoutingModule
   ],
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -82,7 +85,8 @@ const MyPreset = definePreset(Aura, {
       theme: {
        preset: MyPreset
       }
-    })
+    }),
+    AuthStateService
   ],
   bootstrap: [AppComponent]
 })

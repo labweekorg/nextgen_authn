@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthStateService } from 'src/app/service/authState.service';
 
 @Component({
   selector: 'app-comcast-sign',
@@ -16,7 +17,7 @@ export class ComcastSignComponent {
   emailForm: FormGroup;
   passwordForm: FormGroup;
 
-  constructor(private fb: FormBuilder,public router: Router) {
+  constructor(private fb: FormBuilder,public router: Router,public authState: AuthStateService) {
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
@@ -40,6 +41,7 @@ export class ComcastSignComponent {
   }
 
   handleSignIn() {
-this.router.navigate(['/signup'])
+    this.authState.setUser({ email: this.emailId });
+    this.router.navigate(['/signup']);
   }
 }

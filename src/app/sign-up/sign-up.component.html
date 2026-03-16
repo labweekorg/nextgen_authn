@@ -1,14 +1,14 @@
 <div class="signup-container">
-  <div class="card" style="padding: 0">
-    <div style="display: flex">
-      <div class="left-panel">
-        <div style="flex: 1; align-self: center">
-          <div style="text-align: center">
-            <img src="../../assets/svg/128px-Comcast_(2013-2024)_logo.svg.png" alt="Comcast Logo" />
-          </div>
-        </div>
-      </div>
-      <div style="flex: 1 1 75%; padding: 44px 40px 40px; margin: 1rem 0">
+    <div class="card" style="padding: 0;">
+        <div style="display: flex;">
+            <div class="left-panel">
+                <div style="flex: 1; align-self: center;">
+                    <div style="text-align: center;"><img src="../../assets/svg/128px-Comcast_(2013-2024)_logo.svg.png"
+                            alt="Comcast Logo">
+                    </div>
+                </div>
+            </div>
+             <div style="flex: 1 1 75%; padding: 44px 40px 40px; margin: 1rem 0">
         <h2 style="margin-bottom: 1rem">Registration</h2>
         <p-stepper [value]="1" [linear]="true">
           <p-step-list>
@@ -262,9 +262,6 @@
                           <p-button
                             label="Set Passkey"
                             (click)="submitPasskey()"
-                            [disabled]="
-                              passKeyValue?.length !== 6 || getState('passkey').status === 'loading'
-                            "
                           />
                         </div>
                       </ng-container>
@@ -324,6 +321,14 @@
           </p-step-panels>
         </p-stepper>
       </div>
+
+        </div>
+      </div>
+     
     </div>
-  </div>
-</div>
+  <!-- </div>
+</div> -->
+
+
+
+          

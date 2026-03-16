@@ -6,18 +6,13 @@ import { OtpCodeComponent } from './auth/otp-code/otp-code.component';
 import { FaceRecognitionComponent } from './auth/face-recognition/face-recognition.component';
 
 const routes: Routes = [
-  {
-    path: 'signup',
-    loadChildren: () => import('./sign-up/sign-up.module').then((m) => m.SignUpModule),
-  },
-  {
+ {
     path: '',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   },
   {
-    path: '',
-    redirectTo: '/',
-    pathMatch: 'full',
+    path: 'signup',
+    loadChildren: () => import('./sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
 ];
 
