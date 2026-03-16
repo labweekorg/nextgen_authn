@@ -55,9 +55,6 @@ export class BioMetricsComponent implements OnInit {
 
       console.log('Calling registerBiometric with:', user);
 
-      // Trigger the biometric registration/authentication
-      // const result = await this.webAuthnService.registerBiometric(userId, username);
-
       const result = await this.webAuthnService.authenticateBiometric(username);
       console.log('registerBiometric result:', result.message);
 

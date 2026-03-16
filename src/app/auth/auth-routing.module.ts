@@ -10,29 +10,34 @@ import { ComcastSignComponent } from './comcast-sign/comcast-sign/comcast-sign.c
 const routes: Routes = [
   {
     path: '',
+    component: ComcastSignComponent,
+  },
+  {
+    path: 'auth',
     component: AuthComponent,
-  children:[{
-  path: 'bio',
-  component: BioMetricsComponent
-},
-{
-  path: 'pass',
-  component: PassKeyComponent
-},{
-  path: 'otp',
-  component: OtpCodeComponent
-},
-{
-  path: 'face',
-  component: FaceRecognitionComponent
-}
-]},{
-  path: 'comcast-sign',
-  component: ComcastSignComponent
-}];
+    children: [
+      {
+        path: 'bio',
+        component: BioMetricsComponent,
+      },
+      {
+        path: 'pass',
+        component: PassKeyComponent,
+      },
+      {
+        path: 'otp',
+        component: OtpCodeComponent,
+      },
+      {
+        path: 'face',
+        component: FaceRecognitionComponent,
+      },
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AuthRoutingModule { }
+export class AuthRoutingModule {}

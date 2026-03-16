@@ -54,6 +54,8 @@ export interface LoginVerifyRequest {
   };
 }
 
+type PlatformRegistrationMode = 'fingerprint' | 'faceId' | 'passkey';
+
 @Injectable({ providedIn: 'root' })
 export class WebAuthnService {
   private readonly api = 'http://localhost:8080/webauthn';
@@ -263,97 +265,50 @@ export class WebAuthnService {
     });
   }
 
-  async registerBiometric(userId: string, username: string): Promise<VerifyResponse> {
-    // Demo mode - simulate successful biometric authentication
-    // if (this.DEMO_MODE) {
-    //   console.log('DEMO MODE: Simulating biometric authentication');
+  async registerFingerprint(userId: string, username: string): Promise<VerifyResponse> {
+    return this.registerWebAuthnCredential(userId, username, 'fingerprint');
+  }
 
-    //   const platformAvailable =
-    //     await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-    //   console.log('platformAvailable', platformAvailable);
+  async registerFaceId(userId: string, username: string): Promise<VerifyResponse> {
+    return this.registerWebAuthnCredential(userId, username, 'faceId');
+  }
 
-    //   if (!platformAvailable) {
-    //     throw new Error(
-    //       'Touch ID is not available. Ensure Touch ID is enabled in System Settings.'
-    //     );
-    //   }
-
-    //   // Simulate a delay for the authentication process
-    //   await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    //   // Simulate successful verification
-    //   return {
-    //     verified: true,
-    //     token: 'demo-token-' + Date.now(),
-    //     message: 'Demo authentication successful',
-    //   };
-    // }
-
-    // Production mode - call actual backend
+  async registerPasskey(pin: string, username: string): Promise<VerifyResponse> {
     const platformAvailable =
       await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-    console.log(' platformAvailable ', platformAvailable);
-
     if (!platformAvailable) {
       throw new Error('Touch ID is not available. Ensure Touch ID is enabled in System Settings.');
     }
 
-    // Step 1 — get challenge + options from backend
-    // const { options, sessionId } = await firstValueFrom(
-    //   this.http
-    //     .post<RegisterStartResponse>(`${this.api}/register/start`, {
-    //       userId,
-    //       username,
-    //     })
-    //     .pipe(
-    //       map((res) => {
-    //         return { options: res.options, sessionId: res.sessionId };
-    //       })
-    //     )
-    // );
+    // Pass the PIN to the backend so it can store it alongside the WebAuthn credential.
+    // Uses the same /register/options + /register/verify endpoints as fingerprint/faceId.
     const { options, sessionId } = await this.getRegistrationOptions({
       username,
       displayName: username,
+      pin,
     });
 
-    console.log('Options from server:', options);
+    console.log('Passkey PIN registration options:', options);
     console.log('Session ID:', sessionId);
 
-    // Force platform authenticator (Touch ID/Face ID/Windows Hello) instead of cross-platform
-    if (options.authenticatorSelection) {
-      options.authenticatorSelection.authenticatorAttachment = 'platform';
-      options.authenticatorSelection.requireResidentKey = true;
-      options.authenticatorSelection.residentKey = 'required';
-      options.authenticatorSelection.userVerification = 'required';
-    }
-
-    console.log('Modified options for platform authenticator:', options);
-
-    // Step 2 — browser talks to Touch ID/Face ID → TPM generates key pair
-    //           User sees the Touch ID/Face ID fingerprint UI here
-    console.log('About to call startRegistration...');
+    // Force platform authenticator — no QR code / phone dialog.
+    options.authenticatorSelection = {
+      ...(options.authenticatorSelection ?? {}),
+      authenticatorAttachment: 'platform',
+      residentKey: 'required',
+      requireResidentKey: true,
+      userVerification: 'required',
+    };
 
     let credential;
     try {
       credential = await startRegistration({ optionsJSON: options });
-      console.log('startRegistration succeeded:', credential);
+      console.log('Passkey PIN registration succeeded:', credential);
     } catch (error: any) {
-      console.error('startRegistration failed:', error);
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      throw new Error(`Biometric authentication failed: ${error.message}`);
+      console.error('Passkey PIN registration failed:', error);
+      throw new Error(`Passkey registration failed: ${error?.message}`);
     }
 
-    console.log('Credential created successfully:', credential);
-
-    // Step 3 — send credential (public key + attestation) to backend
-    // return firstValueFrom(
-    //   this.http.post<VerifyResponse>(`${this.api}/register/finish`, {
-    //     sessionId: sessionId,
-    //     userId: userId,
-    //     credential: credential,
-    //   })
-    // );
     return this.getVerifyRegistration({
       id: credential.id,
       rawId: credential.rawId,
@@ -361,5 +316,117 @@ export class WebAuthnService {
       username,
       response: credential.response,
     });
+  }
+
+  async registerBiometric(userId: string, username: string): Promise<VerifyResponse> {
+    return this.registerFingerprint(userId, username);
+  }
+
+  private async registerWebAuthnCredential(
+    userId: string,
+    username: string,
+    mode: PlatformRegistrationMode
+  ): Promise<VerifyResponse> {
+    // Fingerprint always uses the device's built-in biometric (Touch ID / Windows Hello).
+    // Face ID and Passkey omit the attachment so the browser shows its own dialog,
+    // letting the user pick: nearby iPhone (Face ID), iCloud Keychain, security key, etc.
+    const usePlatformOnly = mode === 'fingerprint';
+
+    if (usePlatformOnly) {
+      const platformAvailable =
+        await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+      console.log(`${mode} platformAvailable`, platformAvailable, userId);
+
+      if (!platformAvailable) {
+        throw new Error(this.getUnavailableMessage(mode));
+      }
+    }
+
+    const { options, sessionId } = await this.getRegistrationOptions({
+      username,
+      displayName: username,
+    });
+
+    console.log(`${mode} registration options from server:`, options);
+    console.log('Session ID:', sessionId);
+
+    if (usePlatformOnly) {
+      // Fingerprint: force platform authenticator (Touch ID / Windows Hello)
+      options.authenticatorSelection = {
+        ...(options.authenticatorSelection ?? {}),
+        authenticatorAttachment: 'platform',
+        residentKey: 'preferred',
+        userVerification: 'required',
+      };
+    } else if (mode === 'faceId') {
+      // Camera has already scanned the face; bind the credential to this device's
+      // platform authenticator (Touch ID / Windows Hello) for secure storage.
+      options.authenticatorSelection = {
+        ...(options.authenticatorSelection ?? {}),
+        authenticatorAttachment: 'platform',
+        residentKey: 'preferred',
+        userVerification: 'required',
+      };
+    } else {
+      // Passkey: require a discoverable (resident) credential; let the browser/OS
+      // show its full passkey dialog (iCloud Keychain, nearby device, security key).
+      options.authenticatorSelection = {
+        ...(options.authenticatorSelection ?? {}),
+        residentKey: 'required',
+        requireResidentKey: true,
+        userVerification: 'required',
+        // authenticatorAttachment intentionally NOT set — shows passkey creation dialog
+      };
+    }
+
+    console.log(`Modified options for ${mode}:`, options);
+
+    let credential;
+    try {
+      credential = await startRegistration({ optionsJSON: options });
+      console.log(`${mode} registration succeeded:`, credential);
+    } catch (error: any) {
+      console.error(`${mode} registration failed:`, error);
+      console.error('Error name:', error.name);
+      console.error('Error message:', error.message);
+      throw new Error(this.getRegistrationErrorMessage(mode, error?.message));
+    }
+
+    return this.getVerifyRegistration({
+      id: credential.id,
+      rawId: credential.rawId,
+      type: credential.type,
+      username,
+      response: credential.response,
+    });
+  }
+
+  private getUnavailableMessage(mode: PlatformRegistrationMode): string {
+    if (mode === 'faceId') {
+      return 'Face ID is not available. Ensure Face ID is enabled in System Settings.';
+    }
+
+    if (mode === 'passkey') {
+      return 'A platform passkey is not available on this device. Enable Touch ID, Face ID, or another device passkey provider.';
+    }
+
+    return 'Touch ID is not available. Ensure Touch ID is enabled in System Settings.';
+  }
+
+  private getRegistrationErrorMessage(
+    mode: PlatformRegistrationMode,
+    fallbackMessage?: string
+  ): string {
+    const baseMessage = fallbackMessage || 'The registration prompt could not be completed.';
+
+    if (mode === 'faceId') {
+      return `Face ID registration failed: ${baseMessage}`;
+    }
+
+    if (mode === 'passkey') {
+      return `Passkey registration failed: ${baseMessage}`;
+    }
+
+    return `Fingerprint registration failed: ${baseMessage}`;
   }
 }

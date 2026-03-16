@@ -1,54 +1,124 @@
 <div class="signup-container">
-    <div class="card" style="padding: 0;">
-        <div style="display: flex;">
-            <div class="left-panel">
-                <div style="flex: 1; align-self: center;">
-                    <div style="text-align: center;"><img src="../../assets/svg/128px-Comcast_(2013-2024)_logo.svg.png"
-                            alt="Comcast Logo">
+  <div class="card" style="padding: 0">
+    <div style="display: flex">
+      <div class="left-panel">
+        <div style="flex: 1; align-self: center">
+          <div style="text-align: center">
+            <img src="../../assets/svg/128px-Comcast_(2013-2024)_logo.svg.png" alt="Comcast Logo" />
+          </div>
+        </div>
+      </div>
+      <div style="flex: 1 1 75%; padding: 44px 40px 40px; margin: 1rem 0">
+        <h2 style="margin-bottom: 1rem">Registration</h2>
+        <p-stepper [value]="1" [linear]="true">
+          <p-step-list>
+            <p-step [value]="1">FingerPrint Register</p-step>
+            <p-step [value]="2">Face ID Register</p-step>
+            <p-step [value]="3">PassKey Register</p-step>
+          </p-step-list>
+          <p-step-panels>
+            <p-step-panel [value]="1">
+              <ng-template #content let-activateCallback="activateCallback">
+                <div
+                  class="align-items-center justify-content-center flex auth-panel col-6 col-offset-3"
+                >
+                  <div class="text-center">
+                    <div class="panel-content">
+                      <div
+                        class="scan-ring"
+                        [class.scanning]="getState('fingerprint').status === 'loading'"
+                        [class.success]="getState('fingerprint').status === 'success'"
+                        [class.error]="getState('fingerprint').status === 'error'"
+                        [class.touchid-tap]="
+                          getState('fingerprint').status === 'idle' ||
+                          getState('fingerprint').status === 'error'
+                        "
+                        (click)="registerFingerprint()"
+                        role="button"
+                        aria-label="Tap to scan fingerprint"
+                      >
+                        <div class="scan-inner">
+                          <div
+                            *ngIf="
+                              getState('fingerprint').status !== 'success' &&
+                              getState('fingerprint').status !== 'error'
+                            "
+                            class="fingerprint-container"
+                          >
+                            <svg
+                              class="fingerprint-icon"
+                              viewBox="0 0 24 24"
+                              width="48"
+                              height="48"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14.02 4.04 17.15 5.66c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4 0-1.36.7-2.5 1.69-3.4 2.96-.08.14-.23.21-.39.21z"
+                              />
+                              <path
+                                fill="currentColor"
+                                d="M9.75 21.79c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15z"
+                              />
+                              <path
+                                fill="currentColor"
+                                d="M16.92 19.94c-.19 0-.36-.09-.47-.25-.64-1.15-1.08-1.64-1.85-2.42-.19-.2-.19-.51 0-.71.2-.19.51-.19.71 0 .87.87 1.34 1.43 2.01 2.64.19.34.14.77-.12 1.06-.12.11-.27.18-.43.18z"
+                              />
+                            </svg>
+                            <div
+                              *ngIf="getState('fingerprint').status === 'loading'"
+                              class="scan-line"
+                            ></div>
+                          </div>
+                          <span
+                            *ngIf="getState('fingerprint').status === 'success'"
+                            style="font-size: 28px; color: #10b981"
+                            >&#10003;</span
+                          >
+                          <span
+                            *ngIf="getState('fingerprint').status === 'error'"
+                            style="font-size: 28px; color: #ef4444"
+                            >&#10005;</span
+                          >
+                        </div>
+                      </div>
+                      <div
+                        class="panel-title"
+                        [style.color]="
+                          getState('fingerprint').status === 'success'
+                            ? '#10b981'
+                            : getState('fingerprint').status === 'error'
+                              ? '#ef4444'
+                              : ''
+                        "
+                      >
+                        <span
+                          *ngIf="
+                            getState('fingerprint').status !== 'success' &&
+                            getState('fingerprint').status !== 'error'
+                          "
+                          >Tap the sensor to scan</span
+                        >
+                        <span *ngIf="getState('fingerprint').status === 'success'"
+                          >Registered!</span
+                        >
+                        <span *ngIf="getState('fingerprint').status === 'error'">Failed</span>
+                      </div>
+                      <div class="panel-sub">{{ getState('fingerprint').message }}</div>
                     </div>
+                  </div>
                 </div>
-            </div>
-            <div style="flex: 1 1 75%;padding: 44px 40px 40px;margin: 1rem 0;">
-                <h2 style="margin-bottom: 1rem;">Registration</h2>
-                <p-stepper [value]="1" [linear]="true">
-                    <p-step-list>
-                        <p-step [value]="1">Finger Id Register</p-step>
-                        <p-step [value]="2">Face Id Register</p-step>
-                        <p-step [value]="3">Pass Key Register</p-step>
-                        <p-step [value]="4">Confirmation</p-step>
-                    </p-step-list>
-                    <p-step-panels>
-                        <p-step-panel [value]="1">
-                            <ng-template #content let-activateCallback="activateCallback">
-                                <div
-                                    class="align-items-center justify-content-center flex auth-panel col-6 col-offset-3">
-                                    <div class="text-center">
-                                        <div class="panel-content">
-                                            <div class="scan-ring">
-                                                <div class="scan-inner">👆</div>
-                                            </div>
-                                            <div class="panel-title">Place your finger</div>
-                                            <div class="panel-sub">Touch the fingerprint sensor on your
-                                                device
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">
-                                            <p-button (click)="register()" [disabled]="status === 'loading'">
-                                                🔐 Register Fingerprint
-                                            </p-button>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right"
-                                        (onClick)="activateCallback(2)" />
-                                </div>
-
-                            </ng-template>
-                        </p-step-panel>
-                        <p-step-panel [value]="2">
-                            <!-- <ng-template #content let-activateCallback="activateCallback">
+                <div class="text-right">
+                  <p-button
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    (onClick)="activateFaceStep(activateCallback)"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+            <p-step-panel [value]="2">
+              <!-- <ng-template #content let-activateCallback="activateCallback">
                                 <div
                                     style="height: 360px;display: flex;flex-direction: column;justify-content: space-around;">
                                     <div class="flex justify-content-center">
@@ -75,60 +145,169 @@
                                     </div>
                                 </div>
                             </ng-template> -->
-                            <ng-template #content let-activateCallback="activateCallback">
-                                <div
-                                    class="align-items-center justify-content-center flex auth-panel col-6 col-offset-3">
-                                    <div class="text-center">
-                                        <div class="panel-content">
-                                            <div class="face-box">
-                                                <span style="position:relative;z-index:1">😊</span>
-                                                <div class="face-scan-line"></div>
-                                            </div>
-                                            <div class="panel-title">Look at the camera</div>
-                                            <div class="panel-sub">Center your face in the frame and hold
-                                                still
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">
-                                            <p-button (click)="register()" [disabled]="status === 'loading'">
-                                                😌 Register Face
-                                            </p-button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right"
-                                        (onClick)="activateCallback(3)" />
-                                </div>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div
+                  class="align-items-center justify-content-center flex auth-panel col-6 col-offset-3"
+                >
+                  <div class="text-center">
+                    <div class="panel-content">
+                      <div
+                        class="face-box"
+                        [class.scanning]="faceScanning"
+                        [class.success]="getState('faceId').status === 'success'"
+                        [class.error]="getState('faceId').status === 'error'"
+                      >
+                        <!-- Video element always in DOM so #faceVideo ref is always valid -->
+                        <video
+                          #faceVideo
+                          autoplay
+                          playsinline
+                          muted
+                          class="video-feed"
+                          [style.visibility]="faceCameraReady ? 'visible' : 'hidden'"
+                        ></video>
+                        <div
+                          *ngIf="
+                            !faceCameraReady &&
+                            getState('faceId').status !== 'success' &&
+                            getState('faceId').status !== 'error'
+                          "
+                          class="camera-placeholder"
+                        >
+                          <span style="font-size: 48px; opacity: 0.3">📷</span>
+                        </div>
+                        <span
+                          *ngIf="getState('faceId').status === 'success'"
+                          style="font-size: 48px; color: #10b981"
+                          >&#10003;</span
+                        >
+                        <span
+                          *ngIf="getState('faceId').status === 'error'"
+                          style="font-size: 48px; color: #ef4444"
+                          >&#10005;</span
+                        >
+                        <div *ngIf="faceScanning" class="face-scan-line"></div>
+                        <div *ngIf="faceCameraReady" class="face-outline"></div>
+                      </div>
+                      <div
+                        class="panel-title"
+                        [style.color]="
+                          getState('faceId').status === 'success'
+                            ? '#10b981'
+                            : getState('faceId').status === 'error'
+                              ? '#ef4444'
+                              : ''
+                        "
+                      >
+                        <span
+                          *ngIf="
+                            getState('faceId').status !== 'success' &&
+                            getState('faceId').status !== 'error'
+                          "
+                          >Look at the camera</span
+                        >
+                        <span *ngIf="getState('faceId').status === 'success'">Verified!</span>
+                        <span *ngIf="getState('faceId').status === 'error'">Failed</span>
+                      </div>
+                      <div class="panel-sub">{{ getState('faceId').message }}</div>
+                      <!-- Retry link shown only on error -->
+                      <div *ngIf="getState('faceId').status === 'error'" style="margin-top: 12px">
+                        <a
+                          href="javascript:void(0)"
+                          (click)="retryFaceRegistration()"
+                          style="font-size: 0.85rem; color: var(--primary, #3095f2)"
+                          >Try again</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p-button
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    (onClick)="activateCallback(3)"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+            <p-step-panel [value]="3">
+              <ng-template #content let-activateCallback="activateCallback">
+                <div
+                  class="align-items-center justify-content-center flex auth-panel col-6 col-offset-3"
+                >
+                  <div class="text-center">
+                    <div class="panel-content my-5">
+                      <div class="passkey-badge">🔑</div>
 
-                            </ng-template>
-                        </p-step-panel>
-                        <p-step-panel [value]="3">
-                            <ng-template #content let-activateCallback="activateCallback">
-                            <div class="align-items-center justify-content-center flex auth-panel col-6 col-offset-3">
-                                <div class="text-center">
-                                    <div class="panel-content my-5">
+                      <!-- Success state -->
+                      <div *ngIf="getState('passkey').status === 'success'" style="margin: 16px 0">
+                        <span style="font-size: 48px; color: #10b981">&#10003;</span>
+                        <div class="panel-title" style="margin-top: 14px; color: #10b981">
+                          Passkey Set!
+                        </div>
+                      </div>
 
-                                        <p-inputotp style="margin: 15px 0px;" [(ngModel)]="passKeyValue"
-                                            [integerOnly]="true" [mask]="true" size="large" [length]="6">
-                                            <ng-template pTemplate="input" let-events="events" let-i="i">
-                                                <input type="password" maxlength="1" (input)="events.input($event)"
-                                                    (keydown)="events.keydown($event)" class="otp-box" />
-                                            </ng-template>
-                                        </p-inputotp>
-                                        <div class="panel-title" style="margin-top:14px">Enter 6-digit
-                                            Passkey</div>
-                                        <div class="panel-sub">We'll guide you through the verification
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p-button label="Next" icon="pi pi-arrow-right" iconPos="right"
-                                    (onClick)="activateCallback(4)" />
-                            </div>
-</ng-template>
-                            <!-- <ng-template #content let-activateCallback="activateCallback">
+                      <!-- Entry state -->
+                      <ng-container *ngIf="getState('passkey').status !== 'success'">
+                        <div class="panel-title" style="margin-top: 14px">
+                          Create a 6-digit Passkey
+                        </div>
+                        <div class="panel-sub" style="margin-bottom: 16px">
+                          {{ getState('passkey').message }}
+                        </div>
+
+                        <p-inputotp
+                          [(ngModel)]="passKeyValue"
+                          [integerOnly]="true"
+                          [mask]="true"
+                          [disabled]="getState('passkey').status === 'loading'"
+                          size="large"
+                          [length]="6"
+                        >
+                          <ng-template pTemplate="input" let-events="events">
+                            <input
+                              type="password"
+                              maxlength="1"
+                              (input)="events.input($event)"
+                              (keydown)="events.keydown($event)"
+                              class="otp-box"
+                              [disabled]="getState('passkey').status === 'loading'"
+                            />
+                          </ng-template>
+                        </p-inputotp>
+
+                        <div
+                          *ngIf="getState('passkey').status === 'error'"
+                          style="margin-top: 10px; color: #ef4444; font-size: 0.82rem"
+                        >
+                          {{ getState('passkey').message }}
+                        </div>
+
+                        <div class="mt-4">
+                          <p-button
+                            label="Set Passkey"
+                            (click)="submitPasskey()"
+                            [disabled]="
+                              passKeyValue?.length !== 6 || getState('passkey').status === 'loading'
+                            "
+                          />
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p-button
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    (onClick)="activateCallback(4)"
+                  />
+                </div>
+              </ng-template>
+              <!-- <ng-template #content let-activateCallback="activateCallback">
                                 <div
                                     style="height: 360px;display: flex;flex-direction: column;justify-content: space-around;">
                                     Select Verification Method {{verificationMethod}}
@@ -225,34 +404,50 @@
                                         (onClick)="activateCallback(4)" />
                                 </div>
                             </ng-template> -->
-                        </p-step-panel>
-                        <p-step-panel [value]="4">
-                            <ng-template #content let-activateCallback="activateCallback">
-                                <div
-                                    style="height: 360px;display: flex;flex-direction: column;justify-content: space-around;">
-                                    <div>
-                                        <span
-                                            style="font-size: 1.5rem;font-weight: 600;margin-top: 1rem;display: block;">Confirmation</span>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="confirmation-container">
-                                            <img src="../../assets/image/check_1828640.png" width="100px"
-                                                height="100px">
-                                            <div>Congrats You have Successfully Signed Up <span><img
-                                                        src="../../assets/image/party-popper.png" width="24px"
-                                                        height="24px"></span></div>
-                                        </div>
-                                    </div>
-                                    <div class="text-right mt-4">
-                                        <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" />
-                                    </div>
-                                </div>
-                            </ng-template>
-                        </p-step-panel>
-                    </p-step-panels>
-
-                </p-stepper>
-            </div>
-        </div>
+            </p-step-panel>
+            <p-step-panel [value]="4">
+              <ng-template #content let-activateCallback="activateCallback">
+                <div
+                  style="
+                    height: 360px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                  "
+                >
+                  <div>
+                    <span
+                      style="font-size: 1.5rem; font-weight: 600; margin-top: 1rem; display: block"
+                      >Confirmation</span
+                    >
+                  </div>
+                  <div class="text-center">
+                    <div class="confirmation-container">
+                      <img
+                        src="../../assets/image/check_1828640.png"
+                        width="100px"
+                        height="100px"
+                      />
+                      <div>
+                        Congrats You have Successfully Signed Up
+                        <span
+                          ><img
+                            src="../../assets/image/party-popper.png"
+                            width="24px"
+                            height="24px"
+                        /></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-right mt-4">
+                    <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" />
+                  </div>
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-panels>
+        </p-stepper>
+      </div>
     </div>
+  </div>
 </div>

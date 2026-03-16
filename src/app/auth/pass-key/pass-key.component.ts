@@ -64,8 +64,7 @@ export class PassKeyComponent implements OnInit, AfterViewInit, DoCheck {
         // Redirect to Workday
         setTimeout(() => {
           console.log('Passkey authentication successful', result);
-          window.location.href =
-            'https://wd5.myworkday.com/comcast/d/pex/home.htmld?type=7c48590b5257100009485b7a25ae0068';
+          window.open('/assets/success.html', '_blank');
         }, 1500);
       } else {
         throw new Error(result.message || 'Invalid passkey');

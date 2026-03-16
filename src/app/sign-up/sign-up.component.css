@@ -1,46 +1,279 @@
-.signup-container{
-    width: 70%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.signup-container {
+  width: 70%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.error-message{
-    color: #dc2626;
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
-    padding-left: 0.5rem;
+.error-message {
+  color: #dc2626;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  padding-left: 0.5rem;
 }
 
-.left-panel{
-    flex: 1 1 25%;
-    display: flex;
-    padding: 44px 40px 40px;
-    background: linear-gradient(160deg, rgba(48,149,242) 0%, #0d5db5 100%);
-    border-top-left-radius: 28px;
-    border-bottom-left-radius: 28px;
+.left-panel {
+  flex: 1 1 25%;
+  display: flex;
+  padding: 44px 40px 40px;
+  background: linear-gradient(160deg, rgba(48, 149, 242) 0%, #0d5db5 100%);
+  border-top-left-radius: 28px;
+  border-bottom-left-radius: 28px;
 }
 
-.confirmation-container{
-    display: inline-block;
-    padding: 3rem;
+.confirmation-container {
+  display: inline-block;
+  padding: 3rem;
 }
 
-.auth-select{
-    display: flex;
-    align-items: baseline;
+.auth-select {
+  display: flex;
+  align-items: baseline;
 }
 
-.bordered-box{
+.bordered-box {
   border: 1.5px solid rgba(48, 149, 242, 0.15);
   background: #f4f9ff;
 }
 
-.verification-selection-box{
-        flex: 1 1 50%;
-    align-self: center;
-    padding-left: 2rem;
-    border-left: 1px solid rgba(48, 149, 242, 0.15);
-    margin-left: 2rem;
+.verification-selection-box {
+  flex: 1 1 50%;
+  align-self: center;
+  padding-left: 2rem;
+  border-left: 1px solid rgba(48, 149, 242, 0.15);
+  margin-left: 2rem;
+}
+
+.passkey-badge {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  font-size: 2rem;
+  background: linear-gradient(160deg, rgba(48, 149, 242, 0.12) 0%, rgba(13, 93, 181, 0.2) 100%);
+  color: #0d5db5;
+}
+
+/* ── Fingerprint Touch ID sensor ─────────────────────────── */
+.touchid-tap {
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.touchid-tap:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 6px rgba(48, 149, 242, 0.15);
+}
+
+.touchid-tap:active {
+  transform: scale(0.96);
+}
+
+.scan-ring.scanning {
+  animation: pulse 1.5s ease-in-out infinite;
+  border-color: var(--primary, #3095f2);
+}
+
+.scan-ring.success {
+  border-color: #10b981;
+  animation: successPulse 0.5s ease-out;
+}
+
+.scan-ring.error {
+  border-color: #ef4444;
+  animation: errorShake 0.5s ease-out;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+.fingerprint-container {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fingerprint-icon {
+  color: var(--primary, #3095f2);
+  z-index: 1;
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+  box-shadow: 0 0 8px #10b981;
+  animation: scanAnimation 2s linear infinite;
+  z-index: 2;
+}
+
+@keyframes scanAnimation {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.face-box {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.video-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.camera-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.face-outline {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 180px;
+  border: 2px solid var(--primary, #3b82f6);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  pointer-events: none;
+  opacity: 0.6;
+  animation: faceOutlinePulse 2s ease-in-out infinite;
+}
+
+@keyframes faceOutlinePulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.02);
+  }
+}
+
+.face-scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+  box-shadow: 0 0 10px #10b981;
+  animation: faceScanAnimation 2s linear infinite;
+  z-index: 10;
+}
+
+@keyframes faceScanAnimation {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.face-box.scanning {
+  border: 2px solid var(--primary, #3b82f6);
+  animation: facePulse 1.5s ease-in-out infinite;
+}
+
+.face-box.success {
+  border: 2px solid #10b981;
+}
+
+.face-box.error {
+  border: 2px solid #ef4444;
+}
+
+@keyframes facePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
 }
