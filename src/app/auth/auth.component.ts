@@ -24,7 +24,7 @@ export class AuthComponent {
 
   selectMethod(method: string) {
     console.log(`Selected method: ${method}`);
-    this.router.navigate([`/${method}`]);
+    this.router.navigate([`/auth/${method}`]);
     this.selectedMethod = true;
 
   }
