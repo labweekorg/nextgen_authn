@@ -4,6 +4,7 @@ import { BioMetricsComponent } from './auth/bio-metrics/bio-metrics.component';
 import { PassKeyComponent } from './auth/pass-key/pass-key.component';
 import { OtpCodeComponent } from './auth/otp-code/otp-code.component';
 import { FaceRecognitionComponent } from './auth/face-recognition/face-recognition.component';
+import { SuccessComponent } from './success/success.component';
 
 const routes: Routes = [
  {
@@ -14,6 +15,10 @@ const routes: Routes = [
     path: 'signup',
     loadChildren: () => import('./sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
+  {
+    path: 'success',
+    component: SuccessComponent
+  }
 ];
 
 @NgModule({

@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WebAuthnService } from '../service/webauthn.service';
 import { AuthStateService } from '../service/authState.service';
+import { Router } from '@angular/router';
 
 type RegistrationMethod = 'fingerprint' | 'faceId' | 'passkey';
 type RegistrationStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -47,7 +48,8 @@ export class SignUpComponent implements OnDestroy {
   constructor(
     public fb: FormBuilder,
     private webAuthnService: WebAuthnService,
-    public authState: AuthStateService
+    public authState: AuthStateService,
+    public route:Router
   ) {
     this.employeeForm = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -365,5 +367,9 @@ export class SignUpComponent implements OnDestroy {
     }
 
     return 'Fingerprint registration was cancelled or denied.';
+  }
+
+  routeToSignIn() {
+    this.route.navigate(['auth/bio']);
   }
 }

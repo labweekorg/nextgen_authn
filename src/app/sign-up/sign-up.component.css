@@ -6,6 +6,16 @@
   transform: translate(-50%, -50%);
 }
 
+   .bg {
+      position: fixed;
+      inset: 0;
+      background-image: url('../../assets/image/illustration.jpeg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.55) saturate(0.85);
+      z-index: 0;
+    }
+
 .error-message {
   color: #dc2626;
   font-size: 0.75rem;
