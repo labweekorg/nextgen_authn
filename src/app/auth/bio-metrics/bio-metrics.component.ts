@@ -16,8 +16,10 @@ export class BioMetricsComponent implements OnInit {
   statusMessage: string = 'Touch the fingerprint sensor on your device';
   userName: string = '';
 
-  constructor(private webAuthnService: WebAuthnService, public authState: AuthStateService) {
-    this.userName = this.authState.getUser();
+  constructor(private webAuthnService: WebAuthnService, public authState: AuthStateService,public router: Router) {
+    this.userName = this.authState.getUser()?.email;
+    
+    
   }
 
   async ngOnInit(): Promise<void> {
@@ -53,8 +55,8 @@ export class BioMetricsComponent implements OnInit {
 
       // Get user info (you may want to get this from a service or route params)
       const userId = 'user-' + Date.now();
-      const username = this.userName;
-      const displayName = 'Current User';
+      const username = `fingerprint-${this.userName}`;
+      const displayName = `fingerprint-${this.userName}`;
       const user = await this.webAuthnService.getRegistrationOptions({ username, displayName });
 
       console.log('Calling registerBiometric with:', user);
@@ -69,7 +71,7 @@ export class BioMetricsComponent implements OnInit {
         // Redirect to success page in a new tab after successful verification
         setTimeout(() => {
           console.log('Authentication successful', result);
-          window.open('/assets/success.html', '_blank');
+          this.router.navigate(['/success']);
         }, 1500);
       } else {
         this.error = result.message || 'Verification failed';

@@ -182,7 +182,7 @@ export class SignUpComponent implements OnDestroy {
 
       state.message = 'Registering with secure system…';
       const userId = `faceId-user-${Date.now()}`;
-      const username = this.employeeForm.get('email')?.value || 'demo-faceId-user';
+      const username = `faceId-${this.employeeForm.get('email')?.value}` || 'demo-faceId-user';
 
       const result = await this.webAuthnService.registerFaceId(userId, username);
 
@@ -236,7 +236,7 @@ export class SignUpComponent implements OnDestroy {
     state.status = 'loading';
     state.message = 'Saving your passkey…';
 
-    const username = this.employeeForm.get('email')?.value || 'demo-passkey-user';
+    const username = `passkey-${this.employeeForm.get('email')?.value}` || 'demo-passkey-user';
 
     try {
       const result = await this.webAuthnService.registerPasskey(this.passKeyValue, username);
@@ -274,7 +274,7 @@ export class SignUpComponent implements OnDestroy {
     state.message = this.getLoadingMessage(method);
 
     const userId = `${method}-user-${Date.now()}`;
-    const username = this.employeeForm.get('email')?.value || `demo-${method}-user`;
+    const username = `${method}-${this.employeeForm.get('email')?.value}` || `demo-${method}-user`;
 
     try {
       const result = await this.callRegistration(method, userId, username);

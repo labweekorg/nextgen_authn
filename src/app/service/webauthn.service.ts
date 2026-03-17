@@ -71,7 +71,7 @@ export class WebAuthnService {
     return platformAuthenticatorIsAvailable();
   }
 
-  async getRegistrationOptions(request: any): Promise<{ options: any; sessionId?: string }> {
+  async   getRegistrationOptions(request: any): Promise<{ options: any; sessionId?: string }> {
     const response = await firstValueFrom(
       this.http.post<any>(`${this.api}/register/options`, request)
     );
@@ -154,9 +154,9 @@ export class WebAuthnService {
       id: assertion.id,
       rawId: assertion.rawId,
       type: assertion.type,
-      username,
+      username: `fingerprint-${username}`,
       response: assertion.response,
-    });
+    });``
   }
 
   // Face Recognition Methods (uses same WebAuthn flow but with face-specific branding)

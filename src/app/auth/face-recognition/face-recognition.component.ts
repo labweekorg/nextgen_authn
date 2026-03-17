@@ -26,7 +26,7 @@ userName: string = '';
     private router: Router,
     public authState: AuthStateService,
   ) {
-    this.userName = this.authState.getUser();
+    this.userName = this.authState.getUser()?.email;;
   }
 
   ngOnInit(): void {
@@ -114,8 +114,8 @@ userName: string = '';
       console.log('Registering face biometric with secure enclave...');
 
       // Use WebAuthn to store face authentication in Secure Enclave
-      const userId = 'user-face-' + Date.now();
-      const username = this.userName;
+      const userId = `face-${this.userName}`;
+      const username = `face-${this.userName}`;
 
       const result = await this.webAuthnService.registerFaceRecognition(userId, username);
 
@@ -131,7 +131,7 @@ userName: string = '';
         // Redirect to Workday
         setTimeout(() => {
           console.log('Face authentication successful', result);
-          window.open('/assets/success.html', '_blank');
+         this.router.navigate(['/success']);
         }, 1500);
       } else {
         throw new Error(result.message || 'Face verification failed');

@@ -31,7 +31,7 @@ export class PassKeyComponent implements OnInit, AfterViewInit, DoCheck {
     private router: Router,
     public authState: AuthStateService,
   ) {
-    this.userName = this.authState.getUser();
+    this.userName = this.authState.getUser()?.email;
   }
 
   ngAfterViewInit(): void {}
@@ -57,8 +57,8 @@ export class PassKeyComponent implements OnInit, AfterViewInit, DoCheck {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Use WebAuthn for secure passkey verification (stored in Secure Enclave)
-      const userId = 'user-passkey-' + Date.now();
-      const username = this.userName;
+      const userId = `passkey-${this.userName}`;
+      const username = `passkey-${this.userName}`;
 
       const result = await this.webAuthnService.registerBiometric(userId, username);
 
@@ -69,7 +69,7 @@ export class PassKeyComponent implements OnInit, AfterViewInit, DoCheck {
         // Redirect to Workday
         setTimeout(() => {
           console.log('Passkey authentication successful', result);
-          window.open('/assets/success.html', '_blank');
+          this.router.navigate(['/success']);
         }, 1500);
       } else {
         throw new Error(result.message || 'Invalid passkey');

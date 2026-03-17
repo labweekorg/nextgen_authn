@@ -18,9 +18,7 @@ export class AuthStateService {
     this.currentUserSubject.next(user);
     this.isAuthenticatedSubject.next(true);
     
-    if (token) {
-      localStorage.setItem('authToken', token);
-    }
+ 
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
@@ -29,14 +27,13 @@ export class AuthStateService {
   logout() {
     this.currentUserSubject.next(null);
     this.isAuthenticatedSubject.next(false);
-    localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
   }
 
   private loadUserFromStorage() {
     const user = localStorage.getItem('currentUser');
     const token = localStorage.getItem('authToken');
-    if (user && token) {
+    if (user) {
       this.currentUserSubject.next(JSON.parse(user));
       this.isAuthenticatedSubject.next(true);
     }
