@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
 import { WebAuthnService } from '../../service/webauthn.service';
 import { Router } from '@angular/router';
+import { AuthStateService } from 'src/app/service/authState.service';
 
 @Component({
   selector: 'app-face-recognition',
@@ -19,11 +20,14 @@ export class FaceRecognitionComponent implements OnInit, AfterViewInit, OnDestro
 
   private stream: MediaStream | null = null;
   private faceDetectionInterval: any;
-
+userName: string = '';
   constructor(
     private webAuthnService: WebAuthnService,
-    private router: Router
-  ) {}
+    private router: Router,
+    public authState: AuthStateService,
+  ) {
+    this.userName = this.authState.getUser();
+  }
 
   ngOnInit(): void {
     console.log('FaceRecognitionComponent initialized');
@@ -111,7 +115,7 @@ export class FaceRecognitionComponent implements OnInit, AfterViewInit, OnDestro
 
       // Use WebAuthn to store face authentication in Secure Enclave
       const userId = 'user-face-' + Date.now();
-      const username = 'face-recognition-user';
+      const username = this.userName;
 
       const result = await this.webAuthnService.registerFaceRecognition(userId, username);
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebAuthnService } from '../../service/webauthn.service';
 import { Router } from '@angular/router';
+import { AuthStateService } from 'src/app/service/authState.service';
 
 @Component({
   selector: 'app-bio-metrics',
@@ -13,8 +14,11 @@ export class BioMetricsComponent implements OnInit {
   success: boolean = false;
   error: string = '';
   statusMessage: string = 'Touch the fingerprint sensor on your device';
+  userName: string = '';
 
-  constructor(private webAuthnService: WebAuthnService) {}
+  constructor(private webAuthnService: WebAuthnService, public authState: AuthStateService) {
+    this.userName = this.authState.getUser();
+  }
 
   async ngOnInit(): Promise<void> {
     // Check if platform authenticator is available
@@ -49,7 +53,7 @@ export class BioMetricsComponent implements OnInit {
 
       // Get user info (you may want to get this from a service or route params)
       const userId = 'user-' + Date.now();
-      const username = 'current-user';
+      const username = this.userName;
       const displayName = 'Current User';
       const user = await this.webAuthnService.getRegistrationOptions({ username, displayName });
 

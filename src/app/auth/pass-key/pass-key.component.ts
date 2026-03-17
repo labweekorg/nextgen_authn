@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { WebAuthnService } from '../../service/webauthn.service';
 import { Router } from '@angular/router';
+import { AuthStateService } from 'src/app/service/authState.service';
 
 @Component({
   selector: 'app-pass-key',
@@ -23,11 +24,15 @@ export class PassKeyComponent implements OnInit, AfterViewInit, DoCheck {
   success: boolean = false;
   error: string = '';
   statusMessage: string = 'Enter your 6-digit passkey';
+  userName: string = '';
 
   constructor(
     private webAuthnService: WebAuthnService,
-    private router: Router
-  ) {}
+    private router: Router,
+    public authState: AuthStateService,
+  ) {
+    this.userName = this.authState.getUser();
+  }
 
   ngAfterViewInit(): void {}
 
@@ -53,7 +58,7 @@ export class PassKeyComponent implements OnInit, AfterViewInit, DoCheck {
 
       // Use WebAuthn for secure passkey verification (stored in Secure Enclave)
       const userId = 'user-passkey-' + Date.now();
-      const username = 'passkey-user';
+      const username = this.userName;
 
       const result = await this.webAuthnService.registerBiometric(userId, username);
 
