@@ -29,7 +29,7 @@ export class PassKeyComponent implements OnInit, AfterViewInit, DoCheck {
   constructor(
     private webAuthnService: WebAuthnService,
     private router: Router,
-    public authState: AuthStateService,
+    public authState: AuthStateService
   ) {
     this.userName = this.authState.getUser()?.email;
   }
@@ -60,7 +60,7 @@ export class PassKeyComponent implements OnInit, AfterViewInit, DoCheck {
       const userId = `passkey-${this.userName}`;
       const username = `passkey-${this.userName}`;
 
-      const result = await this.webAuthnService.registerBiometric(userId, username);
+      const result = await this.webAuthnService.authenticatePasskey(username);
 
       if (result.verified) {
         this.success = true;

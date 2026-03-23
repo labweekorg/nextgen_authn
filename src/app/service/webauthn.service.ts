@@ -71,7 +71,7 @@ export class WebAuthnService {
     return platformAuthenticatorIsAvailable();
   }
 
-  async   getRegistrationOptions(request: any): Promise<{ options: any; sessionId?: string }> {
+  async getRegistrationOptions(request: any): Promise<{ options: any; sessionId?: string }> {
     const response = await firstValueFrom(
       this.http.post<any>(`${this.api}/register/options`, request)
     );
@@ -156,7 +156,8 @@ export class WebAuthnService {
       type: assertion.type,
       username: `fingerprint-${username}`,
       response: assertion.response,
-    });``
+    });
+    ``;
   }
 
   // Face Recognition Methods (uses same WebAuthn flow but with face-specific branding)
@@ -254,6 +255,59 @@ export class WebAuthnService {
     }
 
     console.log('Face ID assertion created successfully:', assertion);
+
+    // Step 3 — send assertion to backend for verification
+    return this.getVerifyLogin({
+      id: assertion.id,
+      rawId: assertion.rawId,
+      type: assertion.type,
+      username,
+      response: assertion.response,
+    });
+  }
+
+  async authenticatePasskey(username: string): Promise<VerifyResponse> {
+    const platformAvailable =
+      await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    console.log('Platform authenticator available for Passkey:', platformAvailable);
+
+    if (!platformAvailable) {
+      throw new Error(
+        'A platform passkey is not available on this device. Enable Touch ID, Face ID, or another device passkey provider.'
+      );
+    }
+
+    // Step 1 — get challenge + options from backend
+    const { options, sessionId } = await this.getLoginOptions({ username });
+
+    console.log('Passkey login options from server:', options);
+    console.log('Session ID:', sessionId);
+
+    // Ensure allowCredentials have platform transports
+    if (options.allowCredentials && Array.isArray(options.allowCredentials)) {
+      options.allowCredentials = options.allowCredentials.map((cred: any) => ({
+        ...cred,
+        transports: ['internal'], // Force platform authenticator (passkey)
+      }));
+    }
+
+    console.log('Modified Passkey login options:', options);
+
+    // Step 2 — browser prompts for passkey authentication
+    console.log('About to call startAuthentication for Passkey...');
+
+    let assertion;
+    try {
+      assertion = await startAuthentication({ optionsJSON: options });
+      console.log('Passkey authentication succeeded:', assertion);
+    } catch (error: any) {
+      console.error('Passkey authentication failed:', error);
+      console.error('Error name:', error.name);
+      console.error('Error message:', error.message);
+      throw new Error(`Passkey authentication failed: ${error.message}`);
+    }
+
+    console.log('Passkey assertion created successfully:', assertion);
 
     // Step 3 — send assertion to backend for verification
     return this.getVerifyLogin({
